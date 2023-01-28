@@ -14,4 +14,7 @@
 - Compiled using Nutika 1.3.2
 - Nutika Compile CMD:  python -m nuitka launcher.py --show-progress --standalone --plugin-enable=pyqt5 --windows-disable-console
 
-![screenshot](https://github.com/s910324/AnimationControl/blob/main/capture/2023-01-28-17-21-12.mp4 "screenshot")
+
+
+https://user-images.githubusercontent.com/1561043/215258570-51f9ddc2-a183-463e-aee9-3325ab0b2e7c.mp4
+
