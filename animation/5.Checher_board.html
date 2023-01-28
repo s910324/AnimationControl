@@ -1,0 +1,44 @@
+<!--paramEnabled-->
+<style>
+	:root {                        /*                                                                     nameLabel,  min,   max, step, prefix, suffix,   default); */
+  
+		--periodic_x :    100px; /* parameter ;       {{periodic_x}} ;   self.addIntParamItem(         "periodic_x",    1,  2000,    1,     "",   "px",       100); */
+		--periodic_y :    100px; /* parameter ;       {{periodic_y}} ;   self.addIntParamItem(         "periodic_y",    1,  2000,    1,     "",   "px",       100); */
+		--back_color :  #000000; /* parameter ; {{background_color}} ; self.addColorParamItem(   "background_color",                                    "#000000"); */
+		--tile_color :  #FF0000; /* parameter ;       {{tile_color}} ; self.addColorParamItem(         "tile_color",                                    "#FF0000"); */
+
+	}
+</style>
+
+
+
+<style>
+	html {
+		height  : 100vh;
+		width   : 100vw;
+		padding :    0;
+		margin  :    0;
+	}
+
+
+	body{
+		width               : 100vw;
+		height              : 100vh;
+		padding             :     0;
+		margin              :     0;
+
+		background          : conic-gradient( 
+			var(--tile_color)   0deg  90deg, 
+			var(--back_color)  90deg 180deg, 
+			var(--tile_color) 180deg 270deg, 
+			var(--back_color) 270deg 360deg
+		);
+
+		background-size     : var(--periodic_x) var(--periodic_y);
+		background-repeat   : repeat;
+	}
+</style>
+
+
+
+

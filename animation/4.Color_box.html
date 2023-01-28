@@ -1,0 +1,86 @@
+<!--paramEnabled-->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<style>
+
+			html, body {
+				width           :  100vw;
+				height          :  100vh;
+				margin          :      0;
+				overflow        : hidden;
+			}
+
+			canvas {
+
+				margin          :                 0;
+				overflow        :            hidden;
+				border          : 0px solid #000000;
+				background-color:           #000000;
+				transform       :      rotate(0deg);
+			}
+		</style>
+
+		
+
+	</head>
+
+	<body bgcolor="#000000">
+		<canvas  id="canvas"></canvas>
+		<script>
+			var items         = [];
+			const canvas      = document.getElementById("canvas");
+			canvas.interval   = setInterval(updateArea, 1);
+			ctx               = canvas.getContext("2d");    
+			ctx.canvas.width  = window.innerWidth;
+			ctx.canvas.height = window.innerHeight;
+
+
+			var x        =  10; /* parameter ;        {{x}} ; self.addIntSlideParamItem(       "x",  -2000,   2000,    1,  "",     "",     10); */
+			var y        =  10; /* parameter ;        {{y}} ; self.addIntSlideParamItem(       "y",  -2000,   2000,    1,  "",     "",     10); */
+			var w        =  10; /* parameter ;        {{w}} ; self.addIntSlideParamItem(       "w",      0,   2000,    1,  "",     "",     10); */
+			var h        =  10; /* parameter ;        {{h}} ; self.addIntSlideParamItem(       "h",      0,   2000,    1,  "",     "",     10); */
+
+			var color_r  = 255; /* parameter ;  {{color_r}} ; self.addIntSlideParamItem( "color_r",      0,    255,    1,  "",     "",    255); */		
+			var color_g  =   0; /* parameter ;  {{color_g}} ; self.addIntSlideParamItem( "color_g",      0,    255,    1,  "",     "",      0); */		
+			var color_b  =   0; /* parameter ;  {{color_b}} ; self.addIntSlideParamItem( "color_b",      0,    255,    1,  "",     "",      0); */		
+
+			
+			addRect(x, y, w, h, color_r,color_g,color_b);
+
+
+			function addRect(x, y, w, h, color_r,color_g,color_b) {
+				this.x          = x;
+				this.y          = y;  
+				this.w          = w;
+				this.h          = h;
+				this.color_r    = color_r;
+				this.color_g    = color_g;
+				this.color_b    = color_b;
+
+				this.update = function() {
+					ctx.fillStyle  = 'rgb(' + this.color_r + ', ' + this.color_g + ', ' + this.color_b + ')';
+					ctx.fillRect(this.x, this.y, this.w, this.h);
+				}
+				items.push(this);
+			}
+
+
+
+			function updateArea() {
+				ctx.canvas.width  = window.innerWidth;
+				ctx.canvas.height = window.innerHeight;
+				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+
+				items.forEach((item, i) =>
+					item.update()
+				);
+
+			}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,163 @@
+<!--paramEnabled-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<style>
+
+            html, body {
+				width           :  100vw;
+				height          :  100vh;
+				margin          :     0;
+				overflow        : hidden;
+            }
+
+            canvas {
+
+				margin          :  0;
+				overflow        : hidden;
+                border          : 0px solid #000000;
+                background-color:           #000000;
+                transform       :      rotate(0deg);
+            }
+		</style>
+
+		
+
+	</head>
+
+	<body bgcolor="#000000">
+		<canvas  id="canvas"></canvas>
+		<script>
+
+			const canvas      = document.getElementById("canvas");
+			canvas.interval   = setInterval(updateArea, 20);
+			ctx               = canvas.getContext("2d");    
+			ctx.canvas.width  = window.innerWidth;
+			ctx.canvas.height = window.innerHeight;
+
+
+			function drawLine(x1, y1, x2, y2, stroke = 'white', width = 1) {
+				if (width > 0){
+					ctx.strokeStyle = stroke;
+					ctx.lineWidth   = width;
+					ctx.beginPath();
+					ctx.moveTo(x1, y1);
+					ctx.lineTo(x2, y2);
+					ctx.stroke();
+				}
+
+			}
+
+			function drawCircle(x, y, r, stroke = 'white', width = 1){
+				if (width > 0){
+					ctx.strokeStyle = stroke;
+					ctx.lineWidth   =  width;
+					ctx.beginPath();
+					ctx.arc(x, y, r, 0, 2 * Math.PI);
+					ctx.stroke();
+				}
+			}
+
+			function drawCross(x, y, d, stroke = 'white', width = 1) {
+				drawLine(x - d,     y, x + d,     y, stroke, width);
+				drawLine(    x, y - d,     x, y + d, stroke, width);
+			}
+
+			function drawVerticalLines(  x_array, stroke = 'white', width = 1){for (var x in x_array) {drawLine(x, 0, x, ctx.canvas.height, stroke,  width);}}
+
+			function drawHorizontalLines(y_array, stroke = 'white', width = 1){for (var y in y_array) {drawLine(0, y, ctx.canvas.width, y, stroke,  width);}}
+
+			function drawBorderBottom(  stroke = 'white', width = 1) {drawLine(0, ctx.canvas.height, ctx.canvas.width, ctx.canvas.height, stroke,  width);}
+
+			function drawBorderTop(     stroke = 'white', width = 1) {drawLine(0, 0, ctx.canvas.width, 0, stroke,  width);}
+
+			function drawBorderRight(   stroke = 'white', width = 1) {drawLine(ctx.canvas.width, 0, ctx.canvas.width, ctx.canvas.height, stroke,  width);}
+
+			function drawBorderLeft(    stroke = 'white', width = 1) {drawLine(0, 0, 0, ctx.canvas.height, stroke,  width);}
+
+			function drawBorder(        stroke = 'white', width = 1) {
+				drawBorderBottom( stroke, width);
+				drawBorderTop(    stroke, width);
+				drawBorderRight(  stroke, width);
+				drawBorderLeft(   stroke, width);
+			}
+
+			function drawGridLine(grid_row, grid_col, stroke = 'white', width = 1){
+				var x_spacing = ctx.canvas.width  / (grid_col + 1);
+				var y_spacing = ctx.canvas.height / (grid_row + 1);
+
+				for (var i = 0; i < (grid_col + 1); i++) {
+					if (i != 0){
+						x =  i * x_spacing;
+						drawLine(x, 0, x, ctx.canvas.height, stroke,  width);
+					}
+				}
+
+				for (var i = 0; i < (grid_row + 1); i++) {
+					if (i != 0){
+						y =  i * y_spacing;
+						drawLine(0, y, ctx.canvas.width, y, stroke,  width);
+					}
+				}
+			}
+
+			function drawGridCross(grid_row, grid_col, d, stroke = 'white', width = 1){
+				var x_spacing = ctx.canvas.width  / (grid_col + 1);
+				var y_spacing = ctx.canvas.height / (grid_row + 1);
+				for (var i = 0; i < (grid_col + 1); i++) {
+					if (i != 0){
+						x = i * x_spacing;
+						for (var j = 0; j < (grid_row + 1); j++) {
+							if (j != 0){
+								y = j * y_spacing;
+								drawCross(x, y, d, stroke,  width);
+							}
+						}
+					}
+				}
+
+
+			}
+			function drawConcentrics(count, stroke = 'white', width = 1){
+				var r = Math.max(ctx.canvas.width, ctx.canvas.height)/2;
+				var r_spacing = r/count;
+				for (var i = 0; i < count; i++) { 
+					drawCircle(ctx.canvas.width/2, ctx.canvas.height/2, r - (r_spacing * i), stroke, width);
+				}
+			}
+			
+
+			function updateArea() {
+				ctx.canvas.width  = window.innerWidth;
+				ctx.canvas.height = window.innerHeight;
+				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+				                        /*                                                                  nameLabel,  min,    max, step, prefix, suffix, default); */
+				var grid_row     =         3; /* parameter ;          {{grid_row}} ; self.addIntParamItem(           "grid_row",    1,   2000,    1,     "",     "",     3); */
+				
+				var grid_col     =         3; /* parameter ;      {{grid_column}} ;   self.addIntParamItem(      "grid_column",      0,  2000,    1,     "",    "",        3); */
+				var grid_width   =         1; /* parameter ;  {{grid_line_width}} ;   self.addIntParamItem(  "grid_line_width",      0,  2000,    1,     "",    "",        1); */
+				var grid_color   = "#888888"; /* parameter ;       {{grid_color}} ;   self.addColorParamItem(     "grid_color",                                    "#888888"); */
+				var spacer_0     =         0; /* parameter ;         {{spacer_0}} ;   self.SpaceParameterItem(      "spacer_0",                                           10); */
+
+				var cross_size   =        10; /* parameter ;       {{cross_size}} ;   self.addIntParamItem(       "cross_size",      0,  2000,    1,     "",    "",       10); */
+				var cross_width  =         3; /* parameter ;      {{cross_width}} ;   self.addIntParamItem(      "cross_width",      0,  2000,    1,     "",    "",        3); */ 
+				var cross_color  = "#cc5555"; /* parameter ;      {{cross_color}} ;   self.addColorParamItem(    "cross_color",                                    "#cc5555"); */
+				var spacer_1     =         0; /* parameter ;         {{spacer_1}} ;   self.SpaceParameterItem(      "spacer_1",                                           10); */
+
+				var circle_count =         3; /* parameter ;     {{circle_count}} ;   self.addIntParamItem(     "circle_count",      0,  2000,    1,     "",     "",       3); */
+				var circle_width =         1; /* parameter ;     {{circle_width}} ;   self.addIntParamItem(     "circle_width",      0,  2000,    1,     "",     "",       1); */
+				var circle_color = "#888888"; /* parameter ;     {{circle_color}} ;   self.addColorParamItem(   "circle_color",                                    "#888888"); */
+				var spacer_2     =         0; /* parameter ;         {{spacer_2}} ;   self.SpaceParameterItem(      "spacer_2",                                           10); */
+
+				drawBorder(                                       grid_color,   grid_width);
+				drawGridLine(    grid_row, grid_col,              grid_color,   grid_width);
+				drawConcentrics(       circle_count,            circle_color, circle_width);
+				drawGridCross(   grid_row, grid_col, cross_size, cross_color,  cross_width);
+				
+
+			}
+
+		</script>
+	</body>
+</html>

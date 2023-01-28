@@ -1,0 +1,114 @@
+<!--paramEnabled-->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<style>
+
+			html, body {
+				width           :  100vw;
+				height          :  100vh;
+				margin          :      0;
+				overflow        : hidden;
+			}
+
+			canvas {
+
+				margin          :                 0;
+				overflow        :            hidden;
+				border          : 0px solid #000000;
+				background-color:           #000000;
+				transform       :      rotate(0deg);
+			}
+		</style>
+
+		
+
+	</head>
+
+	<body bgcolor="#000000">
+		<canvas  id="canvas"></canvas>
+		<script>
+			var items         = [];
+			const canvas      = document.getElementById("canvas");
+			canvas.interval   = setInterval(updateArea, 1);
+			ctx               = canvas.getContext("2d");    
+			ctx.canvas.width  = window.innerWidth;
+			ctx.canvas.height = window.innerHeight;
+			
+			var text               =  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."; /* parameter ;             {{text}} ; self.addStrParamItem(             "text",                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."); */
+
+			var font_height        =        15; /* parameter ;      {{font_height}} ; self.addIntParamItem(      "font_height",        1,   2000,    1,  "",     "",     10); */
+			var font               =   "Arial"; /* pxarameter ;            {{font}} ; self.addIntParamItem(             "font",        1,   2000,    1,  "",     "",     20); */
+			var font_color         = "#ffffff"; /* parameter ;       {{font_color}} ; self.addColorParamItem(     "font_color",                                   "#FFFFFF"); */		
+
+			
+			addText(text, font_height, font, font_color);
+
+
+
+			function addText(text, lineHeight, font, color) {
+				this.text       = text;
+				this.x          = 0;
+				this.y          = lineHeight;  
+				this.font       = font;
+				this.lineHeight = lineHeight;
+				this.color      = color;
+
+				this.update = function() {
+					ctx.fillStyle    = this.color;
+					ctx.font         = this.lineHeight + "px Arial";
+					var display_text = "";
+
+					var count_x      = (ctx.canvas.width / this.lineHeight);
+					var count_y      = (ctx.canvas.width / this.lineHeight);
+					var row          = Math.floor(this.text.length / count_x);
+
+					for (var i = 0; i < 2 * Math.ceil(count_y / row ); i++){
+						display_text += this.text ;
+					}
+					wrapText(ctx, display_text, this.x, this.y, ctx.canvas.width, this.lineHeight);
+
+				}
+
+				items.push(this);
+
+			}
+
+			function wrapText(context, text, x, y, maxWidth, lineHeight) {
+				var words = text.split(' ');
+				var line = '';
+
+				for(var n = 0; n < words.length; n++) {
+					var testLine = line + words[n] + ' ';
+					var metrics = context.measureText(testLine);
+					var testWidth = metrics.width;
+					if (testWidth > maxWidth && n > 0) {
+						context.fillText(line, x, y);
+						line = words[n] + ' ';
+						y += lineHeight;
+					} else {
+						line = testLine;
+					}
+				}
+				context.fillText(line, x, y);
+				return y
+			}
+
+
+			function updateArea() {
+				ctx.canvas.width  = window.innerWidth;
+				ctx.canvas.height = window.innerHeight;
+				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+
+				items.forEach((item, i) =>
+					item.update()
+				);
+
+			}
+
+		</script>
+	</body>
+</html>

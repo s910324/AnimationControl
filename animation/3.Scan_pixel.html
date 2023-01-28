@@ -1,0 +1,161 @@
+<!--paramEnabled-->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<style>
+
+			html, body {
+				width           :  100vw;
+				height          :  100vh;
+				margin          :      0;
+				overflow        : hidden;
+			}
+
+			canvas {
+
+				margin          :                 0;
+				overflow        :            hidden;
+				border          : 0px solid #000000;
+				background-color:           #000000;
+				transform       :      rotate(0deg);
+			}
+		</style>
+
+		
+
+	</head>
+
+	<body bgcolor="#000000">
+		<canvas  id="canvas"></canvas>
+		<script>
+
+									 /*                                                                           nameLabel,  min,    max, step, prefix, suffix, default); */
+			var orentation    =         0; /* parameter ;          {{orentation}}; self.addDictParameterItem(  "orentation",    {"0 deg" : 0, "90 deg" : 90},    "0 deg"); */
+			var interval      =       200; /* parameter ;           {{interval}} ; self.addIntParamItem(         "interval",    1,   2000,    1,     "",     "",     200); */
+			var spacing       =      1920; /* parameter ;            {{spacing}} ; self.addIntParamItem(          "spacing",    1,   2000,    1,     "",     "",     500); */
+			var width         =         5; /* parameter ;              {{width}} ; self.addIntParamItem(            "width",    1,   2000,    1,     "",     "",       5); */
+			var height        =        20; /* parameter ;             {{height}} ; self.addIntParamItem(           "height",    1,   2000,    1,     "",     "",      20); */
+			var speed_1       =         3; /* parameter ;            {{speed_1}} ; self.addIntParamItem(          "speed_1",    0,   2000,    1,     "",     "",       5); */
+			var speed_2       =        20; /* parameter ;            {{speed_2}} ; self.addIntParamItem(          "speed_2",    0,   2000,    1,     "",     "",      20); */
+			var color         = "#ffffff"; /* parameter ;              {{color}} ; self.addColorParamItem(          "color",                                   "#FFFFFF"); */
+
+			var items         = [];
+			const canvas      = document.getElementById("canvas");
+			canvas.interval   = setInterval(updateArea, interval);
+			ctx               = canvas.getContext("2d");    
+			ctx.canvas.width  = window.innerWidth;
+			ctx.canvas.height = window.innerHeight;
+			
+
+
+			if (orentation == 0){
+				scan_0_series (spacing,  width, height,  speed_1, speed_2, color);
+			}
+
+			if (orentation == 90){
+				scan_90_series (spacing,  height, width,  speed_2, speed_1, color);
+			}		
+
+
+			function scan_0(x, y, width, height, speedX, speedY, color) {
+				this.x      = x;
+				this.y      = y;  
+				this.width  = width;
+				this.height = height;  
+				this.speedX = speedX; 
+				this.speedY = speedY;
+				this.color  = color;
+
+				this.update = function() {
+					this.x += this.speedX;
+
+					if (this.x > ctx.canvas.width){
+						this.x  = 0;
+						this.y += this.speedY;
+					}
+
+					this.y =  (this.y > ctx.canvas.height) ? 0 : this.y;
+
+					ctx.fillStyle  = this.color;
+					ctx.fillRect(this.x, this.y, this.width, this.height);
+				}
+				items.push(this);
+			}
+
+			function scan_90(x, y, width, height,  speedX, speedY, color) {
+				this.x      = x;
+				this.y      = y;  
+				this.width  = width;
+				this.height = height;  
+				this.speedX = speedX; 
+				this.speedY = speedY;
+				this.color  = color;
+
+				this.update = function() {
+					this.y += this.speedY;
+
+					if (this.y > ctx.canvas.height){
+						this.y  = 0;
+						this.x += this.speedX;
+					}
+
+					this.x =  (this.x > ctx.canvas.width) ? 0 : this.x;
+
+					ctx.fillStyle  = this.color;
+					ctx.fillRect(this.x, this.y, this.width, this.height);
+				}
+				items.push(this);
+			}
+
+			function scan_45(x, y, width, height,  speedX, speedY, color) {
+				this.x      = x;
+				this.y      = y;  
+				this.width  = width;
+				this.height = height;  
+				this.speedX = speedX; 
+				this.speedY = speedY;
+				this.color  = color;
+
+				this.update = function() {
+					this.y += this.speedY;
+
+					if (this.y > ctx.canvas.height){
+						this.y  = 0;
+						this.x += this.speedX;
+					}
+
+					this.x =  (this.x > ctx.canvas.width) ? 0 : this.x;
+
+					ctx.fillStyle  = this.color;
+					ctx.fillRect(this.x, this.y, this.width, this.height);
+				}
+				items.push(this);
+			}
+
+			function scan_0_series(spacing, width, height, speedX, speedY, color){
+				for (var i = 0; i < Math.ceil(ctx.canvas.height/spacing); i++){
+					new scan_0 ( 0,  i*spacing,  width, height, speedX, speedY, color);
+				}
+			}
+
+			function scan_90_series(spacing, width, height, speedX, speedY, color){
+				for (var i = 0; i < Math.ceil(ctx.canvas.width/spacing); i++){
+					new scan_90 ( i*spacing,  0,  width, height, speedX, speedY, color);
+				}
+			}
+
+			function updateArea() {
+				ctx.canvas.width  = window.innerWidth;
+				ctx.canvas.height = window.innerHeight;
+				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+				items.forEach((item, i) =>
+					item.update()
+				);
+
+			}
+
+		</script>
+	</body>
+</html>

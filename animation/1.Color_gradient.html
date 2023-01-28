@@ -1,0 +1,118 @@
+<!--paramEnabled-->
+<style>
+	:root {                        /*                                                                         nameLabel,                                           dictVal,          default); */   
+		--gradient     :  visible; /* parameter ;          {{gradient}}; self.addDictParameterItem(          "gradient",  {"gradient" : "visible", "plan_color" : "hidden"},    "gradient"); */
+
+		                           /*                                                                            nameLabel,  min,   max, step, prefix, suffix, default); */
+		--red          :      255; /* parameter ;            {{red}}   ;   self.addIntSlideParamItem(                "red",    0,   255,    1,     "",     "",     255); */
+		--green        :        0; /* parameter ;            {{green}} ;   self.addIntSlideParamItem(              "green",    0,   255,    1,     "",     "",       0); */
+		--blue         :        0; /* parameter ;            {{blue}}  ;   self.addIntSlideParamItem(               "blue",    0,   255,    1,     "",     "",       0); */
+		--spacer       :        0; /* parameter ;            {{spacer}};   self.SpaceParameterItem(               "spacer",                                         20); */
+		--angle        :     0deg; /* parameter ;            {{angle}} ;   self.addIntSlideParamItem(              "angle",    0,   360,    1,     "",  "deg",       0); */
+		--step         :       10; /* parameter ;            {{step}}  ;   self.addIntSlideParamItem(               "step",    1,    64,    1,     "",     "",      10); */
+
+		--no_gradient  : calc(var(--gradient) == hidden ? visible : hidden) ;
+	}
+
+</style>
+
+
+
+<style>
+	html, body {
+		width            :  100vw;
+		height           :  100vh;
+		margin           :      0;
+		overflow         : hidden;
+		background-color : rgb(var(--red), var(--green),var(--blue));
+	}
+
+	.display{
+		width            : 100%;
+		height           : 100%;
+	}
+
+
+
+	#gradient{
+		width               : 100vw;
+		height              : 100vh;
+		padding             :     0;
+		margin              :     0;
+		visibility          : var(--gradient);
+		background          : linear-gradient(
+			var(--angle), 
+			rgb(calc( 0.10 * var(--red)), calc(0.10 * var(--green)), calc( 0.10 * var(--blue)))  10%,
+			rgb(calc( 0.20 * var(--red)), calc(0.20 * var(--green)), calc( 0.20 * var(--blue)))  10%,
+			rgb(calc( 0.20 * var(--red)), calc(0.20 * var(--green)), calc( 0.20 * var(--blue)))  20%,
+			rgb(calc( 0.30 * var(--red)), calc(0.30 * var(--green)), calc( 0.30 * var(--blue)))  20%,
+			rgb(calc( 0.30 * var(--red)), calc(0.30 * var(--green)), calc( 0.30 * var(--blue)))  30%,
+			rgb(calc( 0.40 * var(--red)), calc(0.40 * var(--green)), calc( 0.40 * var(--blue)))  30%,
+			rgb(calc( 0.40 * var(--red)), calc(0.40 * var(--green)), calc( 0.40 * var(--blue)))  40%,
+			rgb(calc( 0.50 * var(--red)), calc(0.50 * var(--green)), calc( 0.50 * var(--blue)))  40%,
+			rgb(calc( 0.50 * var(--red)), calc(0.50 * var(--green)), calc( 0.50 * var(--blue)))  50%,
+			rgb(calc( 0.60 * var(--red)), calc(0.60 * var(--green)), calc( 0.60 * var(--blue)))  50%,
+			rgb(calc( 0.60 * var(--red)), calc(0.60 * var(--green)), calc( 0.60 * var(--blue)))  60%,
+			rgb(calc( 0.70 * var(--red)), calc(0.70 * var(--green)), calc( 0.70 * var(--blue)))  60%,
+			rgb(calc( 0.70 * var(--red)), calc(0.70 * var(--green)), calc( 0.70 * var(--blue)))  70%,
+			rgb(calc( 0.80 * var(--red)), calc(0.80 * var(--green)), calc( 0.80 * var(--blue)))  70%,
+			rgb(calc( 0.80 * var(--red)), calc(0.80 * var(--green)), calc( 0.80 * var(--blue)))  80%,
+			rgb(calc( 0.90 * var(--red)), calc(0.90 * var(--green)), calc( 0.90 * var(--blue)))  80%,
+			rgb(calc( 0.90 * var(--red)), calc(0.90 * var(--green)), calc( 0.90 * var(--blue)))  90%,
+			rgb(calc( 1.00 * var(--red)), calc(1.00 * var(--green)), calc( 1.00 * var(--blue)))  90%,
+			rgb(calc( 1.00 * var(--red)), calc(1.00 * var(--green)), calc( 1.00 * var(--blue))) 100%);
+	}
+</style>
+
+
+
+<body>
+	<div id = "gradient"></div>
+	<script>
+		var root         = document.querySelector(':root');
+		var root_style   = getComputedStyle(root);
+
+		function setGradient(step) {
+
+			var gradient_div = document.getElementById("gradient");
+			var angle        = root_style.getPropertyValue('--angle');
+			var red_val      = root_style.getPropertyValue('--red');
+			var green_val    = root_style.getPropertyValue('--green');
+			var blue_val     = root_style.getPropertyValue('--blue');
+
+			gradient_bg = "linear-gradient(" + angle + ", \n";
+			percent = 1/step;
+
+			for (var i = 0; i < step; i++){
+				j = i + 1;
+				var percent_i = percent * i;
+				var percent_j = percent * j;
+				var ir = (percent_i *   red_val).toFixed(0);
+				var ig = (percent_i * green_val).toFixed(0);
+				var ib = (percent_i *  blue_val).toFixed(0);
+				var jr = (percent_j *   red_val).toFixed(0);
+				var jg = (percent_j * green_val).toFixed(0);
+				var jb = (percent_j *  blue_val).toFixed(0);
+
+				var strip_color_start = "rgb(" + ir + "," + ig + "," + ib + ") " + (percent_i * 100).toFixed(2) + "%, ";
+				var	strip_color_end   = "rgb(" + jr + "," + jg + "," + jb + ") " + (percent_i * 100).toFixed(2) + "%, \n";
+
+				gradient_bg += strip_color_start;
+				gradient_bg += strip_color_end;
+			}
+
+			var strip_color_final     = "rgb(" + red_val + "," + green_val + "," + blue_val + ") 100%)";
+
+			gradient_bg += strip_color_final;
+			gradient_div.style.background = gradient_bg;
+			// console.log(gradient_bg);
+		}
+		var step  = root_style.getPropertyValue('--step');
+
+		setGradient(step);
+	</script>
+</body>
+
+
+
+

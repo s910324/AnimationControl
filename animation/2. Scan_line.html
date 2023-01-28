@@ -1,0 +1,53 @@
+<!--paramEnabled-->
+<style>
+	:root {                        /*                                                                     nameLabel,  min,   max, step, prefix, suffix, default); */
+		--speed        :     0.6s; /* parameter ;            {{speed}} ; self.addFloatParamItem(            "speed",  0.1, 10000,  0.1,     "",    "s",       1); */
+		--angle        :    45deg; /* parameter ;            {{angle}} ;   self.addIntParamItem(            "angle",    0,   360,    1,     "",  "deg",      45); */
+		--periodic     :     20px; /* parameter ;         {{periodic}} ;   self.addIntParamItem(         "periodic",    2,  2000,    1,     "",   "px",      40); */
+		--stripe_width :      2px; /* parameter ;     {{stripe_width}} ;   self.addIntParamItem(     "stripe_width",    0,  2000,    1,     "",   "px",       2); */
+		--back_color   :  #000000; /* parameter ; {{background_color}} ; self.addColorParamItem( "background_color",                                  "#000000"); */
+		--stripe_color :  #FF0000; /* parameter ;     {{stripe_color}} ; self.addColorParamItem(     "stripe_color",                                  "#FF0000"); */
+	}
+</style>
+
+
+
+<style>
+	html, body {
+		width    :   100%;
+		height   :  100vh;
+		margin   :      0;
+		overflow : hidden;
+	}
+
+	@keyframes MOVE-BG {
+		from {transform: translateX(0);}
+		to   {transform: rotate(calc(var(--angle))) translateY(calc(var(--periodic))) rotate(calc(-1 * var(--angle)));}
+	}
+	.module {
+			position: absolute;
+			left     : calc(-1 * var(--periodic));
+			top      : calc(-1 * var(--periodic));
+			right    :      0;
+			bottom   :      0;
+			z-index  :     -1;  
+			width    :  calc(100vw + 2 * var(--periodic));
+			height   :  calc(100vh + 2 * var(--periodic));
+			margin   :      0;  
+			overflow : hidden;
+			background: repeating-linear-gradient(
+				var(--angle),
+				var(--stripe_color),
+				var(--stripe_color) var(--stripe_width),
+				var(--back_color)   var(--stripe_width),
+				var(--back_color)   var(--periodic)
+		);
+		
+		-webkit-animation: MOVE-BG var(--speed) infinite steps(120);
+/*		filter: blur(3px);*/
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+	}
+
+</style>
+<div class="module"></div>
